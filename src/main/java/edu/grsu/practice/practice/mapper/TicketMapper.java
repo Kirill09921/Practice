@@ -1,22 +1,32 @@
 package edu.grsu.practice.practice.mapper;
 
+import edu.grsu.practice.practice.dto.BookingDto;
 import edu.grsu.practice.practice.dto.TicketDto;
+import edu.grsu.practice.practice.model.Booking;
 import edu.grsu.practice.practice.model.Ticket;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.nio.charset.Charset;
 import java.util.Base64;
+import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TicketMapper {
 
     @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "stringToBytes")
     TicketDto toDto(Ticket ticket);
+
     @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "bytesToString")
     Ticket toEntity(TicketDto ticketDto);
+
+    @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "stringToBytes")
+    List<TicketDto> toDto(List<Ticket> tickets);
+
+    @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "bytesToString")
+    List<Ticket> toEntity(List<Ticket> tickets);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Ticket partialUpdate(TicketDto ticketDto, @MappingTarget Ticket ticket);
 
     @Named("bytesToString")
     default String bytesToString(byte[] bytes){
