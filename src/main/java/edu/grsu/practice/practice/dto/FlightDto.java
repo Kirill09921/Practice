@@ -5,6 +5,7 @@ import edu.grsu.practice.practice.model.Ticket;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@ToString
 public class FlightDto {
     private UUID id;
     private String departure;
