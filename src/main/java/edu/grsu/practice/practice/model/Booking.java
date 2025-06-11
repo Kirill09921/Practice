@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -22,7 +23,7 @@ public class Booking {
     @Column(name = "departure_time")
     private LocalDateTime departureTime;
     @Column(name = "arrival_time")
-    private LocalDateTime arrivalTime;
+    private OffsetDateTime arrivalTime;
     @Column(name = "departure_location")
     private String departureLocation;
     @Column(name = "arrival_location")
