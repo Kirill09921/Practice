@@ -23,10 +23,11 @@ public class BookingServiceImpl implements BookingService {
     public BookingRepository bookingRepository;
 
     @Override
-    public void addBooking(BookingDto bookingDto) {
+    public BookingDto addBooking(BookingDto bookingDto) {
         log.info("adding booking: {}", bookingDto);
-        Booking booking = bookingMapper.toEntity(bookingDto);;
+        Booking booking = bookingMapper.toEntity(bookingDto);
         bookingRepository.save(booking);
+        return bookingMapper.toDto(booking);
     }
 
     @Override
@@ -46,19 +47,22 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void deleteBooking(UUID bookingId) {
+    public boolean deleteBooking(UUID bookingId) {
         log.info("deleting booking: {}", bookingId);
         Optional<Booking> bookingOptional = bookingRepository.findById(bookingId);
         Booking booking = bookingOptional.orElseThrow();
         bookingRepository.delete(booking);
+        return true;
     }
 
     @Override
-    public void updateBooking(UUID bookingId, BookingDto bookingDto) {
+    public BookingDto updateBooking(BookingDto bookingDto) {
+        UUID bookingId = bookingDto.getId();
         log.info("updating booking: {}", bookingId);
         Optional<Booking> bookingOptional = bookingRepository.findById(bookingId);
         Booking existingBooking = bookingOptional.orElseThrow();
         existingBooking = bookingMapper.partialUpdate(bookingDto, existingBooking);
         bookingRepository.save(existingBooking);
+        return bookingMapper.toDto(existingBooking);
     }
 }

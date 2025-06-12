@@ -23,10 +23,11 @@ public class PlaneServiceImpl implements PlaneService {
     public PlaneRepository planeRepository;
 
     @Override
-    public void addPlane(PlaneDto planeDto) {
+    public PlaneDto addPlane(PlaneDto planeDto) {
         log.info("adding plane: {}", planeDto);
         Plane plane = planeMapper.toEntity(planeDto);
         planeRepository.save(plane);
+        return planeMapper.toDto(plane);
     }
 
     @Override
@@ -45,19 +46,22 @@ public class PlaneServiceImpl implements PlaneService {
     }
 
     @Override
-    public void deletePlane(UUID planeId) {
+    public boolean deletePlane(UUID planeId) {
         log.info("deleting plane: {}", planeId);
         Optional<Plane> planeOptional = planeRepository.findById(planeId);
         Plane plane = planeOptional.orElseThrow();
         planeRepository.delete(plane);
+        return true;
     }
 
     @Override
-    public void updatePlane(UUID planeId, PlaneDto planeDto) { //uuid?
+    public PlaneDto updatePlane(PlaneDto planeDto) {
+        UUID planeId =  planeDto.getId();
         log.info("updating plane: {}", planeId);
         Optional<Plane> planeOptional = planeRepository.findById(planeId);
         Plane existingPlane = planeOptional.orElseThrow();
         existingPlane = planeMapper.partialUpdate(planeDto, existingPlane);
         planeRepository.save(existingPlane);
+        return planeMapper.toDto(existingPlane);
     }
 }

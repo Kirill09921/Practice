@@ -22,10 +22,11 @@ public class FlightServiceImpl implements FlightService {
     public FlightRepository flightRepository;
 
     @Override
-    public void addFlight(FlightDto flightDto) {
+    public FlightDto addFlight(FlightDto flightDto) {
         log.info("Adding flight: {}", flightDto);
         Flight flight = flightMapper.toEntity(flightDto);
         flightRepository.save(flight);
+        return flightMapper.toDto(flight);
     }
 
     @Override
@@ -44,19 +45,22 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public void deleteFlight(UUID flightId) {
+    public boolean deleteFlight(UUID flightId) {
         log.info("Deleting flight: {}", flightId);
         Optional<Flight> flightOptional = flightRepository.findById(flightId);
         Flight flight = flightOptional.orElseThrow();
         flightRepository.delete(flight);
+        return true;
     }
 
     @Override
-    public void updateFlight(UUID flightId, FlightDto flightDto) {
+    public FlightDto updateFlight(FlightDto flightDto) {
+        UUID flightId =  flightDto.getId();
         log.info("Updating flight: {}", flightId);
         Optional<Flight> flightOptional = flightRepository.findById(flightId);
         Flight existingFlight = flightOptional.orElseThrow();
         existingFlight = flightMapper.partialUpdate(flightDto, existingFlight);
         flightRepository.save(existingFlight);
+        return flightMapper.toDto(existingFlight);
     }
 }

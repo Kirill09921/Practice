@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BookingService {
-    public void addBooking(BookingDto bookingDto);
+    public BookingDto addBooking(BookingDto bookingDto);
     public List<BookingDto> getAllBookings();
     public BookingDto getBooking(UUID bookingId);
-    public void deleteBooking(UUID bookingId);
-    public void updateBooking(UUID bookingId, BookingDto bookingDto);
+    public boolean deleteBooking(UUID bookingId);
+    public BookingDto updateBooking(BookingDto bookingDto);
 }

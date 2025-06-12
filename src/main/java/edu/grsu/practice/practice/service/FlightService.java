@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface FlightService {
-    public void addFlight(FlightDto flightDto);
+    public FlightDto addFlight(FlightDto flightDto);
     public List<FlightDto> getAllFlights();
     public FlightDto getFlight(UUID flightId);
-    public void deleteFlight(UUID flightId);
-    public void updateFlight(UUID flightId,  FlightDto flightDto);
+    public boolean deleteFlight(UUID flightId);
+    public FlightDto updateFlight(FlightDto flightDto);
 }

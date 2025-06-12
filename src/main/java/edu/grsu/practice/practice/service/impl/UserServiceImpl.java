@@ -22,10 +22,11 @@ public class UserServiceImpl implements UserService {
     public UserRepository userRepository;
 
     @Override
-    public void addUser(UserDto userDto) {
+    public UserDto addUser(UserDto userDto) {
         log.info("adding user {}", userDto);
         User user = userMapper.toEntity(userDto);
         userRepository.save(user);
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -44,19 +45,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(UUID userId) {
+    public boolean deleteUser(UUID userId) {
         log.info("deleting user: {}", userId);
         Optional<User> userOptional = userRepository.findById(userId);
         User user = userOptional.orElseThrow();
         userRepository.delete(user);
+        return true;
     }
 
     @Override
-    public void updateUser(UUID userId, UserDto userDto) {
+    public UserDto updateUser(UserDto userDto) {
+        UUID userId  = userDto.getId();
         log.info("updating user {}", userId);
         Optional<User> userOptional = userRepository.findById(userId);
         User existingUser = userOptional.orElseThrow();
         existingUser = userMapper.partialUpdate(userDto, existingUser);
         userRepository.save(existingUser);
+        return userMapper.toDto(existingUser);
     }
 }

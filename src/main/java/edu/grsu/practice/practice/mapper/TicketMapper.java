@@ -25,6 +25,7 @@ public interface TicketMapper {
     @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "bytesToString")
     List<Ticket> toEntity(List<Ticket> tickets);
 
+    @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "bytesToString")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Ticket partialUpdate(TicketDto ticketDto, @MappingTarget Ticket ticket);
 

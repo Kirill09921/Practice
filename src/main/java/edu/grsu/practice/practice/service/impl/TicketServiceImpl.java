@@ -22,10 +22,11 @@ public class TicketServiceImpl implements TicketService {
     public TicketRepository ticketRepository;
 
     @Override
-    public void addTicket(TicketDto ticketDto) {
+    public TicketDto addTicket(TicketDto ticketDto) {
         log.info("adding ticket: {}", ticketDto);
         Ticket ticket = ticketMapper.toEntity(ticketDto);
         ticketRepository.save(ticket);
+        return ticketMapper.toDto(ticket);
     }
 
     @Override
@@ -44,19 +45,22 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void deleteTicket(UUID ticketId) {
+    public boolean deleteTicket(UUID ticketId) {
         log.info("deleting ticket: {}", ticketId);
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
         Ticket ticket = ticketOptional.orElseThrow();
         ticketRepository.delete(ticket);
+        return true;
     }
 
     @Override
-    public void updateTicket(UUID ticketId, TicketDto ticketDto) {
+    public TicketDto updateTicket(TicketDto ticketDto) {
+        UUID ticketId =  ticketDto.getId();
         log.info("updating ticket: {}", ticketId);
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
         Ticket existingTicket = ticketOptional.orElseThrow();
         existingTicket = ticketMapper.partialUpdate(ticketDto, existingTicket);
         ticketRepository.save(existingTicket);
+        return ticketMapper.toDto(existingTicket);
     }
 }
