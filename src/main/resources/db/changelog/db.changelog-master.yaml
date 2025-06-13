@@ -1,1 +1,25 @@
 databaseChangeLog:
+  - include:
+      file: classpath:db/changelog/ddl/booking-change-arrival-time-type.yaml
+  - include:
+      file: classpath:db/changelog/dml/plane-insert.sql
+  - include:
+      file: classpath:db/changelog/dml/user-insert.sql
+  - include:
+      file: classpath:db/changelog/dml/flight-insert.sql
+  - include:
+      file: classpath:db/changelog/dml/ticket-insert-without-booking.sql
+  - include:
+      file: classpath:db/changelog/dml/booking-insert.sql
+  - include:
+      file: classpath:db/changelog/dml/ticket-insert-booking.sql
+  - include:
+      file: classpath:db/changelog/dml/delete-old-insert.sql
+  - include:
+      file: classpath:db/changelog/dml/flight-insert-fix.sql
+  - include:
+      file: classpath:db/changelog/dml/ticket-insert-without-booking-fix.sql
+  - include:
+      file: classpath:db/changelog/dml/booking-insert-fix.sql
+  - include:
+      file: classpath:db/changelog/dml/ticket-insert-booking-fix.sql
