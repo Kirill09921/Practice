@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: booking-change-arrival-time-type
+      author: Kirill
+      changes:
+        - modifyDataType:
+            tableName: booking
+            columnName: arrival_time
+            newDataType: TIMESTAMP(6)
