@@ -5,6 +5,7 @@ import edu.grsu.practice.practice.model.Flight;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@ToString
 public class PlaneDto {
     private UUID id;
     private int seats;
