@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Детали пользователя</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+<div th:replace="layout/header :: header"></div>
+<h1 class="text-center mb-4">Детали пользователя</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>ID:</strong> <span th:text="${user.id}"></span></li>
+            <li class="list-group-item"><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></li>
+            <li class="list-group-item"><strong>Email:</strong> <span th:text="${user.email}"></span></li>
+            <li class="list-group-item"><strong>Логин:</strong> <span th:text="${user.login}"></span></li>
+        </ul>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center mt-4">
+    <a href="/user/all" class="btn btn-secondary btn-lg">Назад</a>
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

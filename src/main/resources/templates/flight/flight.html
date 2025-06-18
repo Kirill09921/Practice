@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Детали рейса</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+<div th:replace="layout/header :: header"></div>
+<h1 class="text-center mb-4">Детали рейса</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>ID:</strong> <span th:text="${flight.id}"></span></li>
+            <li class="list-group-item"><strong>Пункт отправления:</strong> <span th:text="${flight.departure}"></span></li>
+            <li class="list-group-item"><strong>Пункт назначения:</strong> <span th:text="${flight.destination}"></span></li>
+        </ul>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center mt-4">
+    <a href="/flight/all" class="btn btn-secondary btn-lg">Назад</a>
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
