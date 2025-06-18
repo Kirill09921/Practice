@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/flight")
-public class FlightController {
+public class FlightRestController {
 
     private FlightService flightService;
 
