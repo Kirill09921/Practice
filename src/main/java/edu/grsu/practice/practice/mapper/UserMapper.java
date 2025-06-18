@@ -10,6 +10,9 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
+
+    @Mapping(target = "bookings", ignore = true)
+    @Mapping(target = "tickets", ignore = true)
     UserDto toDto(User user);
 
     User toEntity(UserDto userDto);

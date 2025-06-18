@@ -10,6 +10,9 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface FlightMapper {
+
+    @Mapping(target = "plane", ignore = true)
+    @Mapping(target = "tickets", ignore = true)
     FlightDto toDto(Flight flight);
 
     Flight toEntity(FlightDto flightDto);

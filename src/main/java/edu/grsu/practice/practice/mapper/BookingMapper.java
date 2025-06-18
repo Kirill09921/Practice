@@ -9,6 +9,8 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BookingMapper {
 
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "ticket", ignore = true)
     BookingDto toDto(Booking booking);
 
     Booking toEntity(BookingDto bookingDto);

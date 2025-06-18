@@ -13,6 +13,9 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TicketMapper {
 
+    @Mapping(target = "flight", ignore = true)
+    @Mapping(target = "booking", ignore = true)
+    @Mapping(target = "user", ignore = true)
     @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "stringToBytes")
     TicketDto toDto(Ticket ticket);
 

@@ -22,6 +22,6 @@ public class Plane {
     private int maxLoad;
     @Column(name = "model")
     private String model;
-    @OneToMany(mappedBy = "plane")
+    @OneToMany(mappedBy = "plane", fetch = FetchType.LAZY)
     private Set<Flight> flights;
 }

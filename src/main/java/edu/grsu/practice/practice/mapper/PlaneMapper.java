@@ -11,6 +11,7 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PlaneMapper {
 
+    @Mapping(target = "flights", ignore = true)
     PlaneDto toDto(Plane plane);
 
     Plane toEntity(PlaneDto planeDto);
