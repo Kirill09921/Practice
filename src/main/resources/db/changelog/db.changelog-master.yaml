@@ -23,3 +23,5 @@ databaseChangeLog:
       file: classpath:db/changelog/dml/booking-insert-fix.sql
   - include:
       file: classpath:db/changelog/dml/ticket-insert-booking-fix.sql
+  - include:
+      file: classpath:db/changelog/dml/ticket-fix-info-base64.sql
