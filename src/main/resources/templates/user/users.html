@@ -7,6 +7,7 @@
 <body class="container mt-4">
 <div th:replace="layout/header :: header"></div>
 <h1 class="text-center mb-4">Список пользователей</h1>
+
 <table class="table table-hover table-bordered table-striped">
     <thead class="table-dark">
     <tr>
@@ -14,6 +15,7 @@
         <th>Имя пользователя</th>
         <th>Email</th>
         <th>Логин</th>
+        <th></th>
         <th></th>
     </tr>
     </thead>
@@ -24,12 +26,22 @@
         <td th:text="${user.email}"></td>
         <td th:text="${user.login}"></td>
         <td><a th:href="@{/user/{id}(id=${user.id})}" class="btn btn-secondary btn-lg w-100 h-100">Подробнее</a></td>
+        <td>
+            <form th:action="@{/user/delete/{id}(id=${user.id})}" method="post" th:method="delete">
+                <button type="submit" class="btn btn-danger btn-lg w-100 h-100"
+                        onclick="return confirm('Вы уверены, что хотите удалить пользователя?');">
+                    Удалить
+                </button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
+
 <div class="d-flex justify-content-center mt-4">
     <a href="/user/create" class="btn btn-secondary btn-lg">Создать</a>
 </div>
+
 <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -31,23 +31,35 @@ public class PlaneController {
     }
 
     @PostMapping("/create")
-    public String createPlane(@RequestBody PlaneDto planeDto, Model model) {
+    public String createPlane(@ModelAttribute PlaneDto planeDto) {
         var plane = planeService.addPlane(planeDto);
-        model.addAttribute("plane", plane);
-        return "createPlane";
+        return "redirect:/plane/all";
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/create")
+    public String createPlane(Model model) {
+        PlaneDto dto = PlaneDto.builder().id(UUID.randomUUID()).build();
+        model.addAttribute("plane", dto);
+        return "plane/create";
+    }
+
+    @DeleteMapping("/delete/{id}")
     public String deletePlane(@PathVariable UUID id, Model model) {
         var isDeleted = planeService.deletePlane(id);
         model.addAttribute("isDeleted", isDeleted);
-        return "deletePlane";
+        return "redirect:/plane/all";
     }
 
-    @PutMapping("/{id}")
-    public String updatePlane(@PathVariable UUID id, @RequestBody PlaneDto planeDto, Model model) {
-        var updatedPlane = planeService.updatePlane(planeDto);
-        model.addAttribute("plane", updatedPlane);
-        return "updatePlane";
+    @PutMapping("/update/{id}")
+    public String updatePlane(@PathVariable UUID id, @ModelAttribute PlaneDto planeDto) {
+        planeService.updatePlane(planeDto);
+        return "redirect:/plane/{id}";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updatePlane(@PathVariable UUID id, Model model) {
+        PlaneDto plane = planeService.getPlane(id);
+        model.addAttribute("plane", plane);
+        return "plane/update";
     }
 }

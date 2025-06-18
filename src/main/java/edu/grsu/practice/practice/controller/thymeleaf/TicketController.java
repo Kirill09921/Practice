@@ -31,23 +31,35 @@ public class TicketController {
     }
 
     @PostMapping("/create")
-    public String createTicket(@RequestBody TicketDto ticketDto, Model model) {
+    public String createTicket(@ModelAttribute TicketDto ticketDto) {
         var ticket = ticketService.addTicket(ticketDto);
-        model.addAttribute("ticket", ticket);
-        return "createTicket";
+        return "redirect:/ticket/all";
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/create")
+    public String createTicket(Model model) {
+        TicketDto dto = TicketDto.builder().id(UUID.randomUUID()).build();
+        model.addAttribute("ticket", dto);
+        return "ticket/create";
+    }
+
+    @DeleteMapping("/delete/{id}")
     public String deleteTicket(@PathVariable UUID id, Model model) {
         var isDeleted = ticketService.deleteTicket(id);
         model.addAttribute("isDeleted", isDeleted);
-        return "deleteTicket";
+        return "redirect:/ticket/all";
     }
 
-    @PutMapping("/{id}")
-    public String updateTicket(@PathVariable UUID id, @RequestBody TicketDto ticketDto, Model model) {
-        var updatedTicket = ticketService.updateTicket(ticketDto);
-        model.addAttribute("ticket", updatedTicket);
-        return "updateTicket";
+    @PutMapping("/update/{id}")
+    public String updateTicket(@PathVariable UUID id, @ModelAttribute TicketDto ticketDto) {
+        ticketService.updateTicket(ticketDto);
+        return "redirect:/ticket/{id}";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateTicket(@PathVariable UUID id, Model model) {
+        TicketDto ticket = ticketService.getTicket(id);
+        model.addAttribute("ticket", ticket);
+        return "ticket/update";
     }
 }

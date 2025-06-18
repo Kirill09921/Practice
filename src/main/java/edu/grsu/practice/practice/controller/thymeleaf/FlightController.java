@@ -31,23 +31,35 @@ public class FlightController {
     }
 
     @PostMapping("/create")
-    public String createFlight(@RequestBody FlightDto flightDto, Model model) {
+    public String createFlight(@ModelAttribute FlightDto flightDto) {
         var flight = flightService.addFlight(flightDto);
-        model.addAttribute("flight", flight);
-        return "createFlight";
+        return "redirect:/flight/all";
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/create")
+    public String createFlight(Model model) {
+        FlightDto dto = FlightDto.builder().id(UUID.randomUUID()).build();
+        model.addAttribute("flight", dto);
+        return "flight/create";
+    }
+
+    @DeleteMapping("/delete/{id}")
     public String deleteFlight(@PathVariable UUID id, Model model) {
         var isDeleted = flightService.deleteFlight(id);
         model.addAttribute("isDeleted", isDeleted);
-        return "deleteFlight";
+        return "redirect:/flight/all";
     }
 
-    @PutMapping("/{id}")
-    public String updateFlight(@PathVariable UUID id, @RequestBody FlightDto flightDto, Model model) {
-        var updatedFlight = flightService.updateFlight(flightDto);
-        model.addAttribute("flight", updatedFlight);
-        return "updateFlight";
+    @PutMapping("/update/{id}")
+    public String updateFlight(@PathVariable UUID id, @ModelAttribute FlightDto flightDto) {
+        flightService.updateFlight(flightDto);
+        return "redirect:/flight/{id}";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateFlight(@PathVariable UUID id, Model model) {
+        FlightDto flight = flightService.getFlight(id);
+        model.addAttribute("flight", flight);
+        return "flight/update";
     }
 }

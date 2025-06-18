@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Редактирование самолёта</title>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+<div th:replace="layout/header :: header"></div>
+<h1 class="text-center mb-4">Редактирование самолёта</h1>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form th:action="@{/plane/update/{id}(id=${plane.id})}" th:object="${plane}" method="post" th:method="put">
+      <div class="mb-3">
+        <label for="seats" class="form-label"><strong>Количество мест</strong></label>
+        <input type="number" id="seats" class="form-control" th:field="*{seats}">
+      </div>
+      <div class="mb-3">
+        <label for="maxLoad" class="form-label"><strong>Максимальная нагрузка</strong></label>
+        <input type="number" id="maxLoad" class="form-control" th:field="*{maxLoad}">
+      </div>
+      <div class="mb-3">
+        <label for="model" class="form-label"><strong>Модель</strong></label>
+        <input type="text" id="model" class="form-control" th:field="*{model}">
+      </div>
+
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="/plane/all" class="btn btn-secondary btn-lg">Назад</a>
+        <button type="submit" class="btn btn-success btn-lg">Сохранить изменения</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -3,15 +3,11 @@ package edu.grsu.practice.practice.controller.thymeleaf;
 import edu.grsu.practice.practice.dto.UserDto;
 import edu.grsu.practice.practice.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
-
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @AllArgsConstructor
 @Controller
@@ -35,24 +31,35 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String createUser(@RequestBody UserDto userDto, Model model) {
+    public String createUser(@ModelAttribute UserDto userDto) {
         var user = userService.addUser(userDto);
-        model.addAttribute("user", user);
-        return "createUser";
+        return "redirect:/user/all";
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/create")
+    public String createUser(Model model) {
+        UserDto dto = UserDto.builder().id(UUID.randomUUID()).build();
+        model.addAttribute("user", dto);
+        return "user/create";
+    }
+
+    @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable UUID id, Model model) {
         var isDeleted = userService.deleteUser(id);
         model.addAttribute("isDeleted", isDeleted);
-        return "deleteUser";
+        return "redirect:/user/all";
     }
 
-    @PutMapping("/{id}")
-    public String updateUser(@PathVariable UUID id, @RequestBody UserDto userDto, Model model) {
-        var updatedUser = userService.updateUser(userDto);
-        model.addAttribute("user", updatedUser);
-        return "updateUser";
+    @PutMapping("/update/{id}")
+    public String updateUser(@PathVariable UUID id, @ModelAttribute UserDto userDto) {
+        userService.updateUser(userDto);
+        return "redirect:/user/{id}";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateUser(@PathVariable UUID id, Model model) {
+        UserDto user = userService.getUser(id);
+        model.addAttribute("user", user);
+        return "user/update";
     }
 }
-
