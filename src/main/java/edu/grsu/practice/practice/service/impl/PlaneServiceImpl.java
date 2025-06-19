@@ -50,6 +50,9 @@ public class PlaneServiceImpl implements PlaneService {
         log.info("deleting plane: {}", planeId);
         Optional<Plane> planeOptional = planeRepository.findById(planeId);
         Plane plane = planeOptional.orElseThrow();
+        if (!plane.getFlights().isEmpty()) {
+            return false;
+        }
         planeRepository.delete(plane);
         return true;
     }

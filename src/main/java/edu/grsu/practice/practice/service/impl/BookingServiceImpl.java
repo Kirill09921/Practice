@@ -51,7 +51,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("deleting booking: {}", bookingId);
         Optional<Booking> bookingOptional = bookingRepository.findById(bookingId);
         Booking booking = bookingOptional.orElseThrow();
-        bookingRepository.delete(booking);
+        bookingRepository.deleteById(bookingId);
         return true;
     }
 

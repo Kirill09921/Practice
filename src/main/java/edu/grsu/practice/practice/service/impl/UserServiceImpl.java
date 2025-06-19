@@ -49,6 +49,9 @@ public class UserServiceImpl implements UserService {
         log.info("deleting user: {}", userId);
         Optional<User> userOptional = userRepository.findById(userId);
         User user = userOptional.orElseThrow();
+        if (user.getBookings() == null || user.getTickets() == null) {
+            return false;
+        }
         userRepository.delete(user);
         return true;
     }

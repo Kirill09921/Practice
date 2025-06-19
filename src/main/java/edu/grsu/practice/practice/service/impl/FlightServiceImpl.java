@@ -49,6 +49,9 @@ public class FlightServiceImpl implements FlightService {
         log.info("Deleting flight: {}", flightId);
         Optional<Flight> flightOptional = flightRepository.findById(flightId);
         Flight flight = flightOptional.orElseThrow();
+        if (!flight.getTickets().isEmpty()) {
+            return false;
+        }
         flightRepository.delete(flight);
         return true;
     }
