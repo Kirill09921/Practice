@@ -19,5 +19,6 @@ public class PlaneDto {
     private int seats;
     private int maxLoad;
     private String model;
+    private String registrationNumber;
     private Set<Flight> flights;
 }
