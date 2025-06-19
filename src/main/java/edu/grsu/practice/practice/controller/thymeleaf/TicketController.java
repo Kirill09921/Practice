@@ -18,15 +18,15 @@ public class TicketController {
 
     @GetMapping("/{id}")
     public String findTicket(@PathVariable UUID id, Model model) {
-        var ticket = ticketService.getTicket(id);
-        model.addAttribute("ticket", ticket);
+        var ticket = ticketService.getTicketView(id);
+        model.addAttribute("ticketView", ticket);
         return "ticket/ticket";
     }
 
     @GetMapping("/all")
     public String findAllTickets(Model model) {
-        var tickets = ticketService.getAllTickets();
-        model.addAttribute("tickets", tickets);
+        var tickets = ticketService.getAllTicketViews();
+        model.addAttribute("ticketViews", tickets);
         return "ticket/tickets";
     }
 

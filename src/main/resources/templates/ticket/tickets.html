@@ -13,19 +13,27 @@
     <tr>
         <th>ID</th>
         <th>Цена</th>
-        <th>Детали рейса</th>
+        <th>Самолет</th>
+        <th>Отправление</th>
+        <th>Пункт назначения</th>
+        <th>Время отправления</th>
+        <th>Время прибытия</th>
         <th></th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="ticket : ${tickets}">
-        <td th:text="${ticket.id}"></td>
-        <td th:text="${ticket.price}"></td>
-        <td th:text="${ticket.flightDetail}"></td>
-        <td><a th:href="@{/ticket/{id}(id=${ticket.id})}" class="btn btn-secondary btn-lg w-100 h-100">Подробнее</a></td>
+    <tr th:each="ticketView : ${ticketViews}">
+        <td th:text="${ticketView.ticket.id}"></td>
+        <td th:text="${ticketView.ticket.price}"></td>
+        <td th:text="${ticketView.plane}"></td>
+        <td th:text="${ticketView.departureLocation}"></td>
+        <td th:text="${ticketView.destinationLocation}"></td>
+        <td th:text="${#temporals.format(ticketView.departureTime, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(ticketView.destinationTime, 'dd-MM-yyyy HH:mm')}"></td>
+        <td><a th:href="@{/ticket/{id}(id=${ticketView.ticket.id})}" class="btn btn-secondary btn-lg w-100 h-100">Подробнее</a></td>
         <td>
-            <form th:action="@{/ticket/delete/{id}(id=${ticket.id})}" method="post" th:method="delete">
+            <form th:action="@{/ticket/delete/{id}(id=${ticketView.ticket.id})}" method="post" th:method="delete">
                 <button type="submit" class="btn btn-danger btn-lg w-100 h-100"
                         onclick="return confirm('Вы уверены, что хотите удалить билет?');">
                     Удалить
