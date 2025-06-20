@@ -1,6 +1,8 @@
 package edu.grsu.practice.practice.controller.thymeleaf;
 
 import edu.grsu.practice.practice.dto.TicketDto;
+import edu.grsu.practice.practice.mapper.BookingMapper;
+import edu.grsu.practice.practice.service.BookingService;
 import edu.grsu.practice.practice.service.TicketService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import java.util.UUID;
 public class TicketController {
 
     private TicketService ticketService;
+    private BookingService bookingService;
+    private BookingMapper bookingMapper;
 
     @GetMapping("/{id}")
     public String findTicket(@PathVariable UUID id, Model model) {
@@ -36,10 +40,13 @@ public class TicketController {
         return "redirect:/ticket/all";
     }
 
-    @GetMapping("/create")
-    public String createTicket(Model model) {
+    @GetMapping("/create/{bookingId}")
+    public String createTicket(Model model, @PathVariable UUID bookingId) {
         TicketDto dto = TicketDto.builder().id(UUID.randomUUID()).build();
+//        var booking =  bookingService.getBooking(bookingId);
+        dto.setBookingId(bookingId);
         model.addAttribute("ticket", dto);
+//        model.addAttribute("booking", booking);
         return "ticket/create";
     }
 

@@ -3,14 +3,18 @@ package edu.grsu.practice.practice.service.impl;
 import edu.grsu.practice.practice.dto.FlightDto;
 import edu.grsu.practice.practice.dto.TicketDto;
 import edu.grsu.practice.practice.dto.TicketView;
+import edu.grsu.practice.practice.mapper.BookingMapper;
 import edu.grsu.practice.practice.mapper.TicketMapper;
+import edu.grsu.practice.practice.mapper.UserMapper;
 import edu.grsu.practice.practice.model.Booking;
 import edu.grsu.practice.practice.model.Flight;
 import edu.grsu.practice.practice.model.Ticket;
+import edu.grsu.practice.practice.model.User;
 import edu.grsu.practice.practice.repository.TicketRepository;
 import edu.grsu.practice.practice.service.BookingService;
 import edu.grsu.practice.practice.service.FlightService;
 import edu.grsu.practice.practice.service.TicketService;
+import edu.grsu.practice.practice.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,11 +31,20 @@ public class TicketServiceImpl implements TicketService {
 
     public TicketMapper ticketMapper;
     public TicketRepository ticketRepository;
+    public BookingService bookingService;
+    public BookingMapper bookingMapper;
+    public UserService userService;
+    public UserMapper userMapper;
 
     @Override
     public TicketDto addTicket(TicketDto ticketDto) {
         log.info("adding ticket: {}", ticketDto);
         Ticket ticket = ticketMapper.toEntity(ticketDto);
+        Booking booking = bookingMapper.toEntity(bookingService.getBooking(ticketDto.getBookingId()));
+        ticket.setBooking(booking);
+        User user = userMapper.toEntity(userService.getUser(bookingService.getUserId(booking.getId())));
+        ticket.setUser(user);
+//        ticket.setFlight(booking);
         ticketRepository.save(ticket);
         return ticketMapper.toDto(ticket);
     }
@@ -101,7 +114,7 @@ public class TicketServiceImpl implements TicketService {
 
                     return TicketView.builder()
                             .ticket(ticket)
-                            .plane(flight.getPlane().getModel())
+                            .plane(flight != null ? flight.getPlane().getModel() : null)
                             .departureLocation(booking.getDepartureLocation())
                             .departureTime(booking.getDepartureTime())
                             .destinationLocation(booking.getArrivalLocation())

@@ -70,4 +70,10 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.save(existingBooking);
         return bookingMapper.toDto(existingBooking);
     }
+
+    @Override
+    public UUID getUserId(UUID bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow();
+        return booking.getUser().getId();
+    }
 }
