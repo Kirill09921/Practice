@@ -2,6 +2,7 @@ package edu.grsu.practice.practice.controller.thymeleaf;
 
 import edu.grsu.practice.practice.dto.BookingDto;
 import edu.grsu.practice.practice.service.BookingService;
+import edu.grsu.practice.practice.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class BookingController {
 
     private BookingService bookingService;
+    private UserService userService;
 
     @GetMapping("/{id}")
     public String findBooking(@PathVariable UUID id, Model model) {
@@ -39,6 +41,8 @@ public class BookingController {
     @GetMapping("/create")
     public String createBooking(Model model) {
         BookingDto dto = BookingDto.builder().id(UUID.randomUUID()).build();
+        var users = userService.getAllUsers();
+        model.addAttribute("users", users);
         model.addAttribute("booking", dto);
         return "booking/create";
     }

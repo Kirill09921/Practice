@@ -2,9 +2,11 @@ package edu.grsu.practice.practice.service.impl;
 
 import edu.grsu.practice.practice.dto.BookingDto;
 import edu.grsu.practice.practice.mapper.BookingMapper;
+import edu.grsu.practice.practice.mapper.UserMapper;
 import edu.grsu.practice.practice.model.Booking;
 import edu.grsu.practice.practice.repository.BookingRepository;
 import edu.grsu.practice.practice.service.BookingService;
+import edu.grsu.practice.practice.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,14 @@ public class BookingServiceImpl implements BookingService {
 
     public BookingMapper bookingMapper;
     public BookingRepository bookingRepository;
+    public UserService userService;
+    public UserMapper userMapper;
 
     @Override
     public BookingDto addBooking(BookingDto bookingDto) {
         log.info("adding booking: {}", bookingDto);
         Booking booking = bookingMapper.toEntity(bookingDto);
+        booking.setUser(userMapper.toEntity(userService.getUser(bookingDto.getUserId())));
         bookingRepository.save(booking);
         return bookingMapper.toDto(booking);
     }

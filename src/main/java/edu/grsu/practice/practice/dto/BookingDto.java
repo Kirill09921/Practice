@@ -24,4 +24,5 @@ public class BookingDto {
     private String arrivalLocation;
     private User user;
     private Ticket ticket;
+    private UUID userId;
 }
