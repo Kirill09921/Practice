@@ -2,6 +2,7 @@ package edu.grsu.practice.practice.controller.thymeleaf;
 
 import edu.grsu.practice.practice.dto.FlightDto;
 import edu.grsu.practice.practice.service.FlightService;
+import edu.grsu.practice.practice.service.PlaneService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class FlightController {
 
     private FlightService flightService;
+    private PlaneService planeService;
 
     @GetMapping("/{id}")
     public String findFlight(@PathVariable UUID id, Model model) {
@@ -39,6 +41,8 @@ public class FlightController {
     @GetMapping("/create")
     public String createFlight(Model model) {
         FlightDto dto = FlightDto.builder().id(UUID.randomUUID()).build();
+        var planes = planeService.getAllPlanes();
+        model.addAttribute("planes", planes);;
         model.addAttribute("flight", dto);
         return "flight/create";
     }

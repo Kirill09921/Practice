@@ -20,4 +20,5 @@ public class FlightDto {
     private String destination;
     private Plane plane;
     private Set<Ticket> tickets;
+    private UUID planeId;
 }
