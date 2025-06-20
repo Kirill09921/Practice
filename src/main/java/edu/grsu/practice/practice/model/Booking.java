@@ -29,6 +29,6 @@ public class Booking {
     private String arrivalLocation;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Ticket ticket;
 }

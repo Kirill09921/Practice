@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/ticket")
-public class TicketController {
+public class TicketRestController {
 
     private TicketService ticketService;
 

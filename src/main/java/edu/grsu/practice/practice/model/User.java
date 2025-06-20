@@ -23,8 +23,8 @@ public class User {
     private String email;
     @Column(name = "login")
     private String login;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Ticket> tickets;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Booking> bookings;
 }

@@ -1,8 +1,8 @@
 package edu.grsu.practice.practice.mapper;
 
-import edu.grsu.practice.practice.dto.BookingDto;
-import edu.grsu.practice.practice.dto.TicketDto;
+import edu.grsu.practice.practice.dto.*;
 import edu.grsu.practice.practice.model.Booking;
+import edu.grsu.practice.practice.model.Flight;
 import edu.grsu.practice.practice.model.Ticket;
 import org.mapstruct.*;
 
@@ -13,7 +13,18 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TicketMapper {
 
-    @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "stringToBytes")
+    @Mapping(target = "ticket", source = "ticket")
+    @Mapping(target = "plane", source = "flight.plane.model")
+    @Mapping(target = "departureLocation", source = "booking.departureLocation")
+    @Mapping(target = "destinationLocation", source = "booking.arrivalLocation")
+    @Mapping(target = "departureTime", source = "booking.departureTime")
+    @Mapping(target = "destinationTime", source = "booking.arrivalTime")
+    TicketView toView(Ticket ticket, Flight flight, Booking booking);
+
+    @Mapping(target = "flight", ignore = true)
+    @Mapping(target = "booking", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "stringToBytes") //ticket.booking.
     TicketDto toDto(Ticket ticket);
 
     @Mapping(source = "flightDetail", target = "flightDetail", qualifiedByName = "bytesToString")

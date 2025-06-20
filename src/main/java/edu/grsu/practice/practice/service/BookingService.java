@@ -11,4 +11,5 @@ public interface BookingService {
     public BookingDto getBooking(UUID bookingId);
     public boolean deleteBooking(UUID bookingId);
     public BookingDto updateBooking(BookingDto bookingDto);
+    public UUID getUserId(UUID bookingId);
 }

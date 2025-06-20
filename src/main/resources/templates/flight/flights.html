@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Список рейсов</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+<div th:replace="layout/header :: header"></div>
+<h1 class="text-center mb-4">Список рейсов</h1>
+
+<table class="table table-hover table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th>ID</th>
+        <th>Пункт отправления</th>
+        <th>Пункт назначения</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="flight : ${flights}">
+        <td th:text="${flight.id}"></td>
+        <td th:text="${flight.departure}"></td>
+        <td th:text="${flight.destination}"></td>
+        <td><a th:href="@{/flight/{id}(id=${flight.id})}" class="btn btn-secondary btn-lg w-100 h-100">Подробнее</a></td>
+        <td>
+            <form th:action="@{/flight/delete/{id}(id=${flight.id})}" method="post" th:method="delete">
+                <button type="submit" class="btn btn-danger btn-lg w-100 h-100"
+                        onclick="return confirm('Вы уверены, что хотите удалить рейс?');">
+                    Удалить
+                </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center mt-4">
+    <a href="/flight/create" class="btn btn-secondary btn-lg">Создать</a>
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

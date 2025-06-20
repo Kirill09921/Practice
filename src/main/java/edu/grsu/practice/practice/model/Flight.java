@@ -21,6 +21,6 @@ public class Flight {
     private String destination;
     @ManyToOne(fetch = FetchType.LAZY)
     private Plane plane;
-    @OneToMany(mappedBy = "flight")
+    @OneToMany(mappedBy = "flight", fetch =  FetchType.LAZY)
     private Set<Ticket> tickets;
 }

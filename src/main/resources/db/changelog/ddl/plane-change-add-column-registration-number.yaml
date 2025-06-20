@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: EP-0005-plane-add-registration-number
+      author: Kirill
+      changes:
+        - addColumn:
+            tableName: plane
+            columns:
+              - column:
+                  name: registration_number
+                  type: varchar(10)

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создание бронирования</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+<div th:replace="layout/header :: header"></div>
+<h1 class="text-center mb-4">Создание нового бронирования</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form th:action="@{/booking/create}" th:object="${booking}" method="post">
+            <div class="mb-3">
+                <label for="time" class="form-label"><strong>Время</strong></label>
+                <input type="text" id="time" class="form-control" th:field="*{time}" required>
+            </div>
+            <div class="mb-3">
+                <label for="departureTime" class="form-label"><strong>Время отправления</strong></label>
+                <input type="text" id="departureTime" class="form-control" th:field="*{departureTime}" required>
+            </div>
+            <div class="mb-3">
+                <label for="arrivalTime" class="form-label"><strong>Время прибытия</strong></label>
+                <input type="text" id="arrivalTime" class="form-control" th:field="*{arrivalTime}" required>
+            </div>
+            <div class="mb-3">
+                <label for="departureLocation" class="form-label"><strong>Место отправления</strong></label>
+                <input type="text" id="departureLocation" class="form-control" th:field="*{departureLocation}" required>
+            </div>
+            <div class="mb-3">
+                <label for="arrivalLocation" class="form-label"><strong>Место прибытия</strong></label>
+                <input type="text" id="arrivalLocation" class="form-control" th:field="*{arrivalLocation}" required>
+            </div>
+            <div class="mb-3">
+                <label for="userId" class="form-label"><strong>Пользователь</strong></label>
+                <select id="userId" class="form-select" th:field="*{userId}" required>
+                    <option value="">-- выберите пользователя --</option>
+                    <option th:each="u : ${users}" th:value="${u.id}"
+                            th:text="${u.getLogin()}"></option>
+                </select>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a href="/booking/all" class="btn btn-secondary btn-lg">Назад</a>
+                <button type="submit" class="btn btn-success btn-lg">Создать бронирование</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
