@@ -4,6 +4,7 @@ import edu.grsu.practice.practice.dto.FlightDto;
 import edu.grsu.practice.practice.mapper.FlightMapper;
 import edu.grsu.practice.practice.mapper.PlaneMapper;
 import edu.grsu.practice.practice.model.Flight;
+import edu.grsu.practice.practice.model.Plane;
 import edu.grsu.practice.practice.repository.FlightRepository;
 import edu.grsu.practice.practice.service.FlightService;
 import edu.grsu.practice.practice.service.PlaneService;
@@ -46,6 +47,8 @@ public class FlightServiceImpl implements FlightService {
         log.info("Getting flight: {}", flightId);
         Optional<Flight> flightOptional = flightRepository.findById(flightId);
         Flight flight = flightOptional.orElseThrow();
+        Plane plane = planeMapper.toEntity(planeService.getPlane(flight.getPlane().getId()));
+        flight.setPlane(plane);
         return flightMapper.toDto(flight);
     }
 

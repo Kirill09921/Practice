@@ -13,6 +13,7 @@ public interface FlightMapper {
 
     @Mapping(target = "plane", ignore = true)
     @Mapping(target = "tickets", ignore = true)
+    @Mapping(source = "plane.id", target = "planeId")
     FlightDto toDto(Flight flight);
 
     Flight toEntity(FlightDto flightDto);

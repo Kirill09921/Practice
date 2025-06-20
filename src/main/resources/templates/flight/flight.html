@@ -14,6 +14,7 @@
             <li class="list-group-item"><strong>ID:</strong> <span th:text="${flight.id}"></span></li>
             <li class="list-group-item"><strong>Пункт отправления:</strong> <span th:text="${flight.departure}"></span></li>
             <li class="list-group-item"><strong>Пункт назначения:</strong> <span th:text="${flight.destination}"></span></li>
+            <li class="list-group-item"><strong>Самолет:</strong> <span th:text="${flight.getPlaneId()}"></span></li>
         </ul>
     </div>
 </div>
