@@ -27,3 +27,5 @@ databaseChangeLog:
       file: classpath:db/changelog/dml/ticket-fix-info-base64.sql
   - include:
       file: classpath:db/changelog/ddl/plane-change-add-column-registration-number.yaml
+  - include:
+      file: classpath:db/changelog/ddl/ticket-change-flight-detail-type.yaml

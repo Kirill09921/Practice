@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: ticket-change-flight-detail-type
+      author: Kirill
+      changes:
+        - modifyDataType:
+            tableName: ticket
+            columnName: flight_detail
+            newDataType: TEXT
