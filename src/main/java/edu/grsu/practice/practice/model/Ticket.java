@@ -16,7 +16,7 @@ public class Ticket {
     private UUID id;
     @Column(name = "price")
     private int price;
-    @Column(name = "flight_detail")
+    @Column(name = "flight_detail", columnDefinition = "TEXT")
     private String flightDetail;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
