@@ -31,23 +31,22 @@ public class TicketServiceImpl implements TicketService {
 
     public TicketMapper ticketMapper;
     public TicketRepository ticketRepository;
-    public BookingService bookingService;
-    public BookingMapper bookingMapper;
-    public UserService userService;
-    public UserMapper userMapper;
 
     @Override
     public TicketDto addTicket(TicketDto ticketDto) {
         log.info("adding ticket: {}", ticketDto);
         Ticket ticket = ticketMapper.toEntity(ticketDto);
-        Booking booking = bookingMapper.toEntity(bookingService.getBooking(ticketDto.getBookingId()));
-        ticket.setBooking(booking);
-        User user = userMapper.toEntity(userService.getUser(bookingService.getUserId(booking.getId())));
-        ticket.setUser(user);
-//        ticket.setFlight(booking);
         ticketRepository.save(ticket);
         return ticketMapper.toDto(ticket);
     }
+
+    @Override
+    public Ticket addTicket(Ticket ticket) {
+        log.info("adding ticket: {}", ticket);
+        ticketRepository.save(ticket);
+        return ticket;
+    }
+
 
     @Override
     public List<TicketDto> getAllTickets() {
