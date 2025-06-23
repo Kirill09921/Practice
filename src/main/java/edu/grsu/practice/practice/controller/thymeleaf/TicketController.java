@@ -5,6 +5,7 @@ import edu.grsu.practice.practice.mapper.BookingMapper;
 import edu.grsu.practice.practice.service.BookingService;
 import edu.grsu.practice.practice.service.TicketService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,12 @@ public class TicketController {
     private TicketService ticketService;
     private BookingService bookingService;
     private BookingMapper bookingMapper;
+
+    @GetMapping("/pdf/{id}")
+    public ResponseEntity<byte[]> viewPdf(@PathVariable UUID id, Model model) {
+
+        return ticketService.viewPdf(id);
+    }
 
     @GetMapping("/{id}")
     public String findTicket(@PathVariable UUID id, Model model) {

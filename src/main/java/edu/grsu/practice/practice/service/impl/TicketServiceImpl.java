@@ -1,5 +1,11 @@
 package edu.grsu.practice.practice.service.impl;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfDocument;
+import com.itextpdf.text.pdf.PdfWriter;
 import edu.grsu.practice.practice.dto.FlightDto;
 import edu.grsu.practice.practice.dto.TicketDto;
 import edu.grsu.practice.practice.dto.TicketView;
@@ -17,8 +23,14 @@ import edu.grsu.practice.practice.service.TicketService;
 import edu.grsu.practice.practice.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,10 +44,16 @@ public class TicketServiceImpl implements TicketService {
     public TicketMapper ticketMapper;
     public TicketRepository ticketRepository;
 
+
+
     @Override
     public TicketDto addTicket(TicketDto ticketDto) {
         log.info("adding ticket: {}", ticketDto);
         Ticket ticket = ticketMapper.toEntity(ticketDto);
+        ticketRepository.save(ticket);
+        byte[] details = generatePdf(ticket.getId());
+        String encoded = Base64.getEncoder().encodeToString(details);
+        ticket.setFlightDetail(encoded);
         ticketRepository.save(ticket);
         return ticketMapper.toDto(ticket);
     }
@@ -79,8 +97,12 @@ public class TicketServiceImpl implements TicketService {
         UUID ticketId =  ticketDto.getId();
         log.info("updating ticket: {}", ticketId);
         Optional<Ticket> ticketOptional = ticketRepository.findById(ticketId);
+//        ticketDto.setFlightDetail(generatePdf(ticketDto));
         Ticket existingTicket = ticketOptional.orElseThrow();
         existingTicket = ticketMapper.partialUpdate(ticketDto, existingTicket);
+        byte[] updatedPdf = generatePdf(existingTicket.getId());
+        String encodedPdf = Base64.getEncoder().encodeToString(updatedPdf);
+        existingTicket.setFlightDetail(encodedPdf);
         ticketRepository.save(existingTicket);
         return ticketMapper.toDto(existingTicket);
     }
@@ -122,5 +144,55 @@ public class TicketServiceImpl implements TicketService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public byte[] generatePdf(UUID id) {
+        Ticket ticketDto = ticketRepository.findById(id).orElseThrow();
+        try {
+            BaseFont baseFont = BaseFont.createFont(
+                    getClass().getClassLoader().getResource("fonts/arial.ttf").getPath(),
+                    BaseFont.IDENTITY_H,
+                    BaseFont.EMBEDDED
+            );
+
+            Font font = new Font(baseFont, 12, Font.NORMAL);
+
+            Document document = new Document();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, out);
+            document.open();
+            document.add(new Paragraph("Билет № " + ticketDto.getId(), font));
+            document.add(new Paragraph("Пользователь: " + ticketDto.getUser().getLogin(), font));
+            document.add(new Paragraph("Самолёт: " + ticketDto.getFlight().getPlane().getModel(), font));
+            document.add(new Paragraph("Рейс: " + ticketDto.getFlight().getId(), font));
+            document.add(new Paragraph("Откуда: " + ticketDto.getBooking().getDepartureLocation(), font));
+            document.add(new Paragraph("Куда: " + ticketDto.getBooking().getArrivalLocation(), font));
+            document.add(new Paragraph("Вылет: " + ticketDto.getBooking().getDepartureTime(), font));
+            document.add(new Paragraph("Прибытие: " + ticketDto.getBooking().getArrivalTime(), font));
+            document.add(new Paragraph("Цена: " + ticketDto.getPrice() + " BYN", font));
+            document.close();
+            return out.toByteArray();
+        } catch (Exception e) {
+            log.error("Ошибка при генерации PDF", e);
+            return null;
+        }
+    }
+
+    @Override
+    public ResponseEntity<byte[]> viewPdf(UUID id) {
+        TicketDto dto = ticketMapper.toDto(ticketRepository.findById(id).orElseThrow());
+        byte[] pdf = dto.getFlightDetail();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition
+                .inline()
+                .filename("ticket_" + id + ".pdf")
+                .build());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdf);
+    }
+
 
 }

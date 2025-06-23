@@ -25,6 +25,8 @@
 <div class="d-flex justify-content-center mt-4">
     <a href="/ticket/all" class="btn btn-secondary btn-lg mx-2">Назад</a>
     <a th:href="@{/ticket/update/{id}(id=${ticketView.ticket.id})}" class="btn btn-secondary btn-lg mx-2">Обновить</a>
+    <a th:href="@{/ticket/pdf/{id}(id=${ticketView.ticket.id})}" target="_blank"
+       class="btn btn-success btn-lg mx-2">Открыть PDF</a>
 </div>
 
 <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
