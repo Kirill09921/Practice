@@ -39,7 +39,14 @@
                             th:text="${u.getLogin()}"></option>
                 </select>
             </div>
-
+            <div class="mb-3">
+                <label for="flightId" class="form-label"><strong>Полёт</strong></label>
+                <select id="flightId" class="form-select" th:field="*{flightId}" required>
+                    <option value="">-- выберите полёт --</option>
+                    <option th:each="f : ${flights}" th:value="${f.id}"
+                            th:text="${f.getId()}"></option>
+                </select>
+            </div>
             <div class="d-flex justify-content-center gap-3 mt-4">
                 <a href="/booking/all" class="btn btn-secondary btn-lg">Назад</a>
                 <button type="submit" class="btn btn-success btn-lg">Создать бронирование</button>
