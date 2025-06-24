@@ -29,3 +29,9 @@ databaseChangeLog:
       file: classpath:db/changelog/ddl/plane-change-add-column-registration-number.yaml
   - include:
       file: classpath:db/changelog/ddl/ticket-change-flight-detail-type.yaml
+  - include:
+      file: classpath:db/changelog/ddl/create-price-table.yaml
+  - include:
+      file: classpath:db/changelog/dml/price-table-insert.sql
+  - include:
+      file: classpath:db/changelog/ddl/drop-price-table.yaml

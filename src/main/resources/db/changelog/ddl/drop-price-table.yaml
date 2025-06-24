@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-price-table
+      author: Kirill
+      changes:
+        - dropTable:
+            tableName: price
+            cascadeConstraints: true
