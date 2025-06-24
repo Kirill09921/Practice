@@ -17,6 +17,6 @@ public interface TicketService {
     public TicketDto updateTicket(TicketDto ticketDto);
     public TicketView  getTicketView(UUID ticketId);
     public List<TicketView> getAllTicketViews();
-    public byte[] generatePdf(UUID id);
+    public byte[] generatePdf(Ticket ticket);
     public ResponseEntity<byte[]> viewPdf(UUID id);
 }

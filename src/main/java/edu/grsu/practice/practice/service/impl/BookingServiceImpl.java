@@ -4,12 +4,14 @@ import edu.grsu.practice.practice.dto.BookingDto;
 import edu.grsu.practice.practice.dto.FlightDto;
 import edu.grsu.practice.practice.dto.TicketDto;
 import edu.grsu.practice.practice.dto.UserDto;
+import edu.grsu.practice.practice.integration.price.PriceServiceClient;
 import edu.grsu.practice.practice.mapper.BookingMapper;
 import edu.grsu.practice.practice.mapper.FlightMapper;
 import edu.grsu.practice.practice.mapper.TicketMapper;
 import edu.grsu.practice.practice.mapper.UserMapper;
 import edu.grsu.practice.practice.model.Booking;
 import edu.grsu.practice.practice.model.Flight;
+import edu.grsu.practice.practice.model.Price;
 import edu.grsu.practice.practice.repository.BookingRepository;
 import edu.grsu.practice.practice.service.BookingService;
 import edu.grsu.practice.practice.service.FlightService;
@@ -38,6 +40,7 @@ public class BookingServiceImpl implements BookingService {
     public FlightMapper flightMapper;
     public TicketService ticketService;
     public TicketMapper ticketMapper;
+    public PriceServiceClient priceServiceClient;
 
 
     @Override
@@ -51,7 +54,7 @@ public class BookingServiceImpl implements BookingService {
         //attach user
         attachUser(booking, bookingDto.getUserId());
         //create and attach ticket
-
+        Price price = priceServiceClient.getPrice(booking.getDepartureLocation(), booking.getArrivalLocation());
         UserDto userDto = userService.getUser(bookingDto.getUserId());
         FlightDto flightDto = flightService.getFlight(bookingDto.getFlightId());
         TicketDto ticketDto = TicketDto.builder()
@@ -59,6 +62,7 @@ public class BookingServiceImpl implements BookingService {
                 .user(userDto)
                 .flight(flightDto)
                 .flightDetail("".getBytes(StandardCharsets.UTF_8))
+                .price(price.getPrice())
                 .build();
 
         var ticket = ticketService.addTicket(ticketDto);

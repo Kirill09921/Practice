@@ -7,20 +7,13 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfWriter;
 import edu.grsu.practice.practice.dto.FlightDto;
+import edu.grsu.practice.practice.dto.PlaneDto;
 import edu.grsu.practice.practice.dto.TicketDto;
 import edu.grsu.practice.practice.dto.TicketView;
-import edu.grsu.practice.practice.mapper.BookingMapper;
-import edu.grsu.practice.practice.mapper.TicketMapper;
-import edu.grsu.practice.practice.mapper.UserMapper;
-import edu.grsu.practice.practice.model.Booking;
-import edu.grsu.practice.practice.model.Flight;
-import edu.grsu.practice.practice.model.Ticket;
-import edu.grsu.practice.practice.model.User;
+import edu.grsu.practice.practice.mapper.*;
+import edu.grsu.practice.practice.model.*;
 import edu.grsu.practice.practice.repository.TicketRepository;
-import edu.grsu.practice.practice.service.BookingService;
-import edu.grsu.practice.practice.service.FlightService;
-import edu.grsu.practice.practice.service.TicketService;
-import edu.grsu.practice.practice.service.UserService;
+import edu.grsu.practice.practice.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ContentDisposition;
@@ -43,6 +36,10 @@ public class TicketServiceImpl implements TicketService {
 
     public TicketMapper ticketMapper;
     public TicketRepository ticketRepository;
+    public PlaneService planeService;
+    public PlaneMapper planeMapper;
+    public FlightService flightService;
+    public FlightMapper flightMapper;
 
 
 
@@ -51,7 +48,15 @@ public class TicketServiceImpl implements TicketService {
         log.info("adding ticket: {}", ticketDto);
         Ticket ticket = ticketMapper.toEntity(ticketDto);
         ticketRepository.save(ticket);
-        byte[] details = generatePdf(ticket.getId());
+        //flightService.getFlight(ticket.getFlight().getId()) - planeId
+        ticket = ticketRepository.findById(ticket.getId()).orElseThrow();
+        Flight flight = flightMapper.toEntity(flightService.getFlight(ticket.getFlight().getId()));
+        Plane plane = planeMapper.toEntity(planeService.getPlane(flightService.getFlight(ticket.getFlight().getId()).getPlaneId()));
+        flight.setPlane(plane);
+//        Plane plane = flight.getPlane();
+//        flight.setPlane(plane);
+        ticket.setFlight(flight);
+        byte[] details = generatePdf(ticket);
         String encoded = Base64.getEncoder().encodeToString(details);
         ticket.setFlightDetail(encoded);
         ticketRepository.save(ticket);
@@ -100,7 +105,7 @@ public class TicketServiceImpl implements TicketService {
 //        ticketDto.setFlightDetail(generatePdf(ticketDto));
         Ticket existingTicket = ticketOptional.orElseThrow();
         existingTicket = ticketMapper.partialUpdate(ticketDto, existingTicket);
-        byte[] updatedPdf = generatePdf(existingTicket.getId());
+        byte[] updatedPdf = generatePdf(existingTicket);
         String encodedPdf = Base64.getEncoder().encodeToString(updatedPdf);
         existingTicket.setFlightDetail(encodedPdf);
         ticketRepository.save(existingTicket);
@@ -146,8 +151,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public byte[] generatePdf(UUID id) {
-        Ticket ticketDto = ticketRepository.findById(id).orElseThrow();
+    public byte[] generatePdf(Ticket ticket) {
         try {
             BaseFont baseFont = BaseFont.createFont(
                     getClass().getClassLoader().getResource("fonts/arial.ttf").getPath(),
@@ -157,19 +161,20 @@ public class TicketServiceImpl implements TicketService {
 
             Font font = new Font(baseFont, 12, Font.NORMAL);
 
+
             Document document = new Document();
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, out);
             document.open();
-            document.add(new Paragraph("Билет № " + ticketDto.getId(), font));
-            document.add(new Paragraph("Пользователь: " + ticketDto.getUser().getLogin(), font));
-            document.add(new Paragraph("Самолёт: " + ticketDto.getFlight().getPlane().getModel(), font));
-            document.add(new Paragraph("Рейс: " + ticketDto.getFlight().getId(), font));
-            document.add(new Paragraph("Откуда: " + ticketDto.getBooking().getDepartureLocation(), font));
-            document.add(new Paragraph("Куда: " + ticketDto.getBooking().getArrivalLocation(), font));
-            document.add(new Paragraph("Вылет: " + ticketDto.getBooking().getDepartureTime(), font));
-            document.add(new Paragraph("Прибытие: " + ticketDto.getBooking().getArrivalTime(), font));
-            document.add(new Paragraph("Цена: " + ticketDto.getPrice() + " BYN", font));
+            document.add(new Paragraph("Билет № " + ticket.getId(), font));
+            document.add(new Paragraph("Пользователь: " + ticket.getUser().getLogin(), font));
+            document.add(new Paragraph("Самолёт: " + ticket.getFlight().getPlane().getModel(), font));
+            document.add(new Paragraph("Рейс: " + ticket.getFlight().getId(), font));
+            document.add(new Paragraph("Откуда: " + ticket.getBooking().getDepartureLocation(), font));
+            document.add(new Paragraph("Куда: " + ticket.getBooking().getArrivalLocation(), font));
+            document.add(new Paragraph("Вылет: " + ticket.getBooking().getDepartureTime(), font));
+            document.add(new Paragraph("Прибытие: " + ticket.getBooking().getArrivalTime(), font));
+            document.add(new Paragraph("Цена: " + ticket.getPrice() + " BYN", font));
             document.close();
             return out.toByteArray();
         } catch (Exception e) {
