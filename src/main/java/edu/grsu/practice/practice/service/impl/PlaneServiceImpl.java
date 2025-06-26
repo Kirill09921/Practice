@@ -46,6 +46,14 @@ public class PlaneServiceImpl implements PlaneService {
     }
 
     @Override
+    public Plane getPlaneEntity(UUID planeId){
+        log.info("getting plane: {}", planeId);
+        Optional<Plane> planeOptional = planeRepository.findById(planeId);
+        Plane plane = planeOptional.orElseThrow();
+        return plane;
+    }
+
+    @Override
     public boolean deletePlane(UUID planeId) {
         log.info("deleting plane: {}", planeId);
         Optional<Plane> planeOptional = planeRepository.findById(planeId);

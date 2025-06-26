@@ -45,6 +45,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserEntity(UUID userId){
+        log.info("getting user {}", userId);
+        Optional<User> userOptional = userRepository.findById(userId);
+        User user = userOptional.orElseThrow();
+        return user;
+    }
+
+    @Override
     public boolean deleteUser(UUID userId) {
         log.info("deleting user: {}", userId);
         Optional<User> userOptional = userRepository.findById(userId);

@@ -18,8 +18,8 @@ public class TicketDto {
     private UUID id;
     private int price;
     private byte[] flightDetail;
-    private User user;
-    private Flight flight;
-    private Booking booking;
+    private UserDto user;
+    private FlightDto flight;
+    private BookingDto booking;
     private UUID bookingId;
 }

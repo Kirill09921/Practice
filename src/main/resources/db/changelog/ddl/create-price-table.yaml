@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-price-table
+      author: Kirill
+      changes:
+        - createTable:
+            tableName: price
+            columns:
+              - column:
+                  name: departure_location
+                  type: VARCHAR(255)
+              - column:
+                  name: arrival_location
+                  type: VARCHAR(255)
+              - column:
+                  name: price
+                  type: INT
+        - addPrimaryKey:
+            tableName: price
+            columnNames: departure_location, arrival_location

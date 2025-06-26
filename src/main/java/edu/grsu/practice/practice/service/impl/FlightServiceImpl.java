@@ -53,6 +53,16 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
+    public Flight getFlightEntity(UUID flightId){
+        log.info("Getting flight: {}", flightId);
+        Optional<Flight> flightOptional = flightRepository.findById(flightId);
+        Flight flight = flightOptional.orElseThrow();
+//        Plane plane = planeService.getPlaneEntity(flight.getPlane().getId());
+//        flight.setPlane(plane);
+        return flight;
+    }
+
+    @Override
     public boolean deleteFlight(UUID flightId) {
         log.info("Deleting flight: {}", flightId);
         Optional<Flight> flightOptional = flightRepository.findById(flightId);

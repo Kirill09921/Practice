@@ -1,16 +1,27 @@
 package edu.grsu.practice.practice.service.impl;
 
 import edu.grsu.practice.practice.dto.BookingDto;
+import edu.grsu.practice.practice.dto.FlightDto;
+import edu.grsu.practice.practice.dto.TicketDto;
+import edu.grsu.practice.practice.dto.UserDto;
+import edu.grsu.practice.practice.integration.price.PriceServiceClient;
 import edu.grsu.practice.practice.mapper.BookingMapper;
+import edu.grsu.practice.practice.mapper.FlightMapper;
+import edu.grsu.practice.practice.mapper.TicketMapper;
 import edu.grsu.practice.practice.mapper.UserMapper;
 import edu.grsu.practice.practice.model.Booking;
+import edu.grsu.practice.practice.model.Flight;
+import edu.grsu.practice.practice.model.Price;
 import edu.grsu.practice.practice.repository.BookingRepository;
 import edu.grsu.practice.practice.service.BookingService;
+import edu.grsu.practice.practice.service.FlightService;
+import edu.grsu.practice.practice.service.TicketService;
 import edu.grsu.practice.practice.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,15 +36,50 @@ public class BookingServiceImpl implements BookingService {
     public BookingRepository bookingRepository;
     public UserService userService;
     public UserMapper userMapper;
+    public FlightService flightService;
+    public FlightMapper flightMapper;
+    public TicketService ticketService;
+    public TicketMapper ticketMapper;
+    public PriceServiceClient priceServiceClient;
+
 
     @Override
     public BookingDto addBooking(BookingDto bookingDto) {
         log.info("adding booking: {}", bookingDto);
+
+        //save pure booking
         Booking booking = bookingMapper.toEntity(bookingDto);
-        booking.setUser(userMapper.toEntity(userService.getUser(bookingDto.getUserId())));
+        Booking saved = bookingRepository.save(booking);
+        bookingDto.setId(saved.getId());
+        //attach user
+        attachUser(booking, bookingDto.getUserId());
+        //create and attach ticket
+        Price price = priceServiceClient.getPrice(booking.getDepartureLocation(), booking.getArrivalLocation());
+        UserDto userDto = userService.getUser(bookingDto.getUserId());
+        FlightDto flightDto = flightService.getFlight(bookingDto.getFlightId());
+        TicketDto ticketDto = TicketDto.builder()
+                .booking(bookingDto)
+                .user(userDto)
+                .flight(flightDto)
+                .flightDetail("".getBytes(StandardCharsets.UTF_8))
+                .price(price.getPrice())
+                .build();
+
+        var ticket = ticketService.addTicket(ticketDto);
+
+        //link ticket to booking
+        booking.setTicket(ticketMapper.toEntity(ticket));
         bookingRepository.save(booking);
+
+
         return bookingMapper.toDto(booking);
     }
+
+    private void attachUser(Booking booking, UUID userId) {
+        booking.setUser(userService.getUserEntity(userId));
+        bookingRepository.save(booking);
+    }
+
 
     @Override
     public List<BookingDto> getAllBookings() {

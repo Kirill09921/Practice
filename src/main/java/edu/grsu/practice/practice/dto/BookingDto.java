@@ -25,4 +25,5 @@ public class BookingDto {
     private User user;
     private Ticket ticket;
     private UUID userId;
+    private UUID flightId;
 }
